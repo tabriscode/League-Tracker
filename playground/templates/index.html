@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/styles.css' %}">
+</head>
+<body>
+    <header class="main-header">
+        <nav>
+            <ul>
+                <li>
+                    <a href="/playground/index"><img src="{% static '/images/title.png' %}" style="width:431px;height:68px;"></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <form action="getsummoner" method="GET">
+        <input type="text" name="summonername" id="summonername" placeholder="Summoner Name" required>
+        <label for="region"></label>
+        <select name="region" id="region">
+            <option value="NA">NA</option>
+            <option value="EUN">EUN</option>
+            <option value="EUW">EUW</option>
+            <option value="KR">KR</option>
+        </select>
+        <select name="queuetype" id="queuetype">
+            <option value="ranked_solo">Ranked Solo</option>
+            <option value="ranked_flex">Ranked Flex</option>
+            <option value="normal_blind">Normal Blind</option>
+            <option value="normal_draft">Normal Draft</option>
+            <option value="aram">ARAM</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

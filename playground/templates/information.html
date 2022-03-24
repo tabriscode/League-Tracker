@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/styles.css' %}">
+</head>
+<html>
+    <body>
+        <header class="main-header">
+            <nav>
+                <ul>
+                    <a href="/playground/index"><img src="{% static '/images/title.png' %}" style="width:431px;height:68px;"></a>
+                </ul>
+            </nav>
+        </header>
+        <h1>
+            Summoner: {{summonername}}<br>
+            Region: {{region}}<br>
+            Avg Game Time: {{average_duration}} min<br>
+            Avg Time Dead: {{average_minutes_dead}} min {{average_seconds_dead}} sec<br>
+            CSPM: {{cspm}}<br>
+            GPM: {{gpm}}<br>
+        </h1>
+    </body>
+</html>
