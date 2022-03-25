@@ -2,23 +2,29 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from riotwatcher import LolWatcher, ApiError
 import math
+
+from storefront.settings import RIOT_API_KEY
 # Create your views here.
 #request -> response
 #request handler
 #action
 
+
 def index(request):
     return render(request, 'index.html')
+
+def error(request):
+    return render(request, 'error.html')
 
 def get_summoner(request):
     summonername = request.GET.get('summonername')
     region = request.GET.get('region')
     queuetype = request.GET.get('queuetype')
-    if region == 'NA':
+    if region == 'NA1':
         route = 'AMERICAS'
-    elif region == 'EUN':
+    elif region == 'EUN1':
         route = 'EUROPE'
-    elif region == 'EUW':
+    elif region == 'EUW1':
         route = 'EUROPE'
     elif region == 'KR':
         route = 'ASIA'
@@ -38,9 +44,9 @@ def get_summoner(request):
     return render(request, 'information.html', context)
 
 #Grabs Riot Games API Key
-def get_API_key():
-    f = open("Riot_api_key.txt", "r")
-    return f.read()
+#def get_API_key():
+#    f = open("Riot_api_key.txt", "r")
+#   return f.read()
 
 def get_matches(summonername, region, route, queuetype, lol_watcher):
     uid = lol_watcher.summoner.by_name(region, summonername)
@@ -48,13 +54,13 @@ def get_matches(summonername, region, route, queuetype, lol_watcher):
     previous_match_ids = lol_watcher.match.matchlist_by_puuid(route #my_region_route 
                                                          ,puuid #puuid 
                                                          ,0 
-                                                         ,20 #total_matches
+                                                         ,10 #total_matches
                                                          ,queuetype #queue_type 
                                                          ,None ,None ,None )
     return previous_match_ids
 
 def calculate(summonername, region, route, queuetype):
-    lol_watcher = LolWatcher(get_API_key())
+    lol_watcher = LolWatcher(RIOT_API_KEY)
     total_duration = 0
     total_gold = 0
     cspm = 0
@@ -72,14 +78,14 @@ def calculate(summonername, region, route, queuetype):
 
     #Grabs all matches, picks specific summoner_name's stats to look at
     #print(f'\nStats averaged for the past {total_matches} games')
-    average_duration = math.trunc(total_duration / 60 / 20 ) #total_matches
+    average_duration = math.trunc(total_duration / 60 / 10 ) #total_matches
     #print("Average game duration (minutes):", total_duration)
-    cspm = round(cspm / 20, 2) #total matches
+    cspm = round(cspm / 10, 2) #total matches
     #print("Average CSPM (Creep Score per minute):", cspm)
-    gpm = round(total_gold / 20, 2) #total matches
+    gpm = round(total_gold / 10, 2) #total matches
     #print("Average Gold Earned:", total_gold)
-    average_minutes_dead = math.trunc(total_dead_time / 20 / 60)
-    average_seconds_dead = math.trunc(total_dead_time / 20 % 60)
+    average_minutes_dead = math.trunc(total_dead_time / 10 / 60)
+    average_seconds_dead = math.trunc(total_dead_time / 10 % 60)
     context = {
         'summonername': summonername,
         'region': region,
