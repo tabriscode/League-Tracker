@@ -1,1 +1,1 @@
-web: waitress-serve --listen=*:8000 storefront.wsgi:application
+web: waitress-serve --listen=*:80 storefront.wsgi:application
