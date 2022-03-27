@@ -76,7 +76,7 @@ def calculate(summonername, region, route, queuetype, lol_watcher, uid):
         x = lol_watcher.match.by_id(route, match_ids[i])
         total_duration += x['info']['gameDuration']
         for increment in range(10):
-            if summonername == x['info']['participants'][increment]['summonerName']:
+            if summonername.lower() == x['info']['participants'][increment]['summonerName'].lower():
                 prefix = x['info']['participants'][increment]
                 total_gold += prefix['goldEarned'] / (x['info']['gameDuration'] / 60)
                 cspm += prefix['totalMinionsKilled'] / (x['info']['gameDuration'] / 60)
