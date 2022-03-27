@@ -40,16 +40,23 @@ def get_summoner(request):
     elif queuetype == 'aram':
         queuetype = 450
 
-    context = calculate(summonername, region, route, queuetype)
+    lol_watcher = LolWatcher(RIOT_API_KEY)
+    try:
+        uid = lol_watcher.summoner.by_name(region, summonername)
+    except ApiError as err:
+        if err.response.status_code == 429:
+            print('We should retry in {} seconds.'.format(err.headers['Retry-After']))
+            print('this retry-after is handled by default by the RiotWatcher library')
+            print('future requests wait until the retry-after time passes')
+        elif err.response.status_code == 404:
+            print('Summoner with that ridiculous name not found.')
+            return render(request, 'error.html')
+        else:
+            raise
+    context = calculate(summonername, region, route, queuetype, lol_watcher, uid)
     return render(request, 'information.html', context)
 
-#Grabs Riot Games API Key
-#def get_API_key():
-#    f = open("Riot_api_key.txt", "r")
-#   return f.read()
-
-def get_matches(summonername, region, route, queuetype, lol_watcher):
-    uid = lol_watcher.summoner.by_name(region, summonername)
+def get_matches(summonername, region, route, queuetype, lol_watcher, uid):
     puuid = uid['puuid']
     previous_match_ids = lol_watcher.match.matchlist_by_puuid(route #my_region_route 
                                                          ,puuid #puuid 
@@ -59,13 +66,12 @@ def get_matches(summonername, region, route, queuetype, lol_watcher):
                                                          ,None ,None ,None )
     return previous_match_ids
 
-def calculate(summonername, region, route, queuetype):
-    lol_watcher = LolWatcher(RIOT_API_KEY)
+def calculate(summonername, region, route, queuetype, lol_watcher, uid):
     total_duration = 0
     total_gold = 0
     cspm = 0
     total_dead_time = 0
-    match_ids = get_matches(summonername, region, route, queuetype, lol_watcher)
+    match_ids = get_matches(summonername, region, route, queuetype, lol_watcher, uid)
     for i in range(len(match_ids)):
         x = lol_watcher.match.by_id(route, match_ids[i])
         total_duration += x['info']['gameDuration']
