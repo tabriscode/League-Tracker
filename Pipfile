@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 waitress = "*"
 django-heroku = "*"
+environ = "*"
 
 [dev-packages]
 
