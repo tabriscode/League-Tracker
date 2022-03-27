@@ -9,6 +9,7 @@ django-heroku = "*"
 django-environ = "*"
 environ = "*"
 django-debug-toolbar = "*"
+riotwatcher = "*"
 
 [dev-packages]
 
