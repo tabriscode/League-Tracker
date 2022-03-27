@@ -1,1 +1,1 @@
-web: waitress-serve --listen=*:80 storefront.wsgi:application
+web: waitress-serve --port=$PORT storefront.wsgi:application
